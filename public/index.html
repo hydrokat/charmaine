@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Charmaine v0.0.2</title>
+    <link rel="stylesheet" type="text/css" href="./public/assets/css/style.css">
+</head>
+
+<body>
+    <div id="charmaine">
+        <div align="center" style="margin-top:70px;">
+            <span class="type-element"></span>
+            <div v-show="earthGlobe">
+                <div id="earth_div"></div>
+            </div>
+            <div v-show="multipleDefinitions">
+                <ol>
+                    <li v-for="definition in definitions">{{definition}}</li>
+                </ol>
+            </div>
+            <div align="center" v-show="cameraDiv">
+                <video id="video" width="640" height="480" autoplay></video>
+            </div>
+
+        </div>
+        <div class="triangle" v-show="triangle"></div>
+    </div>
+
+    <!-- annyang! library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+    <!-- Vue main library -->
+    <script type="text/javascript" src="./public/bower_components/vue/dist/vue.js"></script>
+    <!-- meSpeak library -->
+    <script type="text/javascript" src="./public/assets/mespeak/mespeak.js"></script>
+    <!-- Typed library -->
+    <script type="text/javascript" src="./public/bower_components/typed.js/dist/typed.min.js"></script>
+    <!-- axios library -->
+    <script type="text/javascript" src="./public/bower_components/axios/dist/axios.js"></script>
+    <!-- WebGL Earth -->
+    <script src="http://www.webglearth.com/v2/api.js"></script>
+    <!-- commands -->
+    <script type="text/javascript" src="./public/assets/js/commands.js"></script>
+</body>
+
+</html>
