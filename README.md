@@ -11,13 +11,15 @@ Plugins/API used:
   - http://www.masswerk.at/mespeak/
   - http://www.webglearth.org/
   - https://hapijs.com/
-  
+
 Make sure Node.JS and npm are installed and run
 ```
 npm install
 ```
 
-When all else is done, run 
+Install [NodeMon](https://github.com/remy/nodemon)
+
+When all else is done, run
 
 ```
 npm run-script charm
