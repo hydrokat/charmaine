@@ -17,7 +17,7 @@ Make sure Node.JS and npm are installed and run
 npm install
 ```
 
-When all else is done, run it by 
+When all else is done, run 
 
 ```
 npm run-script charm
