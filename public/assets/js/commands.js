@@ -23,7 +23,8 @@ new Vue({
                 'How old are you': this.myAge,
                 'Random news from *source': this.getNews,
                 'Expand': this.newsLink,
-                'Open camera': this.openCamera
+                'Open camera': this.openCamera,
+                'How is it today': this.howToday
             },
             speakOptions: {
                 amplitude: 100,
@@ -80,7 +81,7 @@ new Vue({
             this.getBatteryInfo();
 
             var introMessage = 'Hi I am Charmaine, your personal assistant. How can I help you?';
-            meSpeak.speak(introMessage, this.speakOptions)
+            meSpeak.speak(introMessage, this.speakOptions, this.resume(0))
             this.type([introMessage])
             this.animateSpeak(5200);
 
@@ -94,8 +95,8 @@ new Vue({
                 console.log('error')
             })
         },
-        resume() {
-            this.activate.play();
+        resume(sound = 1) {
+            if(sound) this.activate.play();
             annyang.addCommands(this.mainCommands);
         },
         stop() {
@@ -152,7 +153,7 @@ new Vue({
 
             function showPosition(position) {
                 var weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${_this.apiKeys.openweather}&units=metric`;
-                _this.wait();
+                _this.wait("I'm fetching your weather data.");
                 setTimeout(function () {
                     axios.get(weatherURL).then(response => {
                         _this.stop();
@@ -168,16 +169,25 @@ new Vue({
             }
         },
         time() {
-            var time = new Date().toLocaleTimeString();
-            meSpeak.speak(time, this.speakOptions);
-            this.type([time])
-            this.animateSpeak(3000);
-            this.stop();
+            return new Promise((resolve, reject) => {
+              var time = new Date().toLocaleTimeString();
+              var done = 0;
+              meSpeak.speak(`The time, is` + time, this.speakOptions, done=1);
+              this.type([time])
+              this.animateSpeak(3000);
+              this.stop();
+              if (done) {
+                resolve("Stuff worked!");
+              }
+              else {
+                reject(Error("It broke"));
+              }
+            });
         },
-        wait() {
+        wait(info = '') {
             this.animateSpeak(1000);
-            meSpeak.speak('Please wait...', this.speakOptions);
-            this.type(['Please wait...'])
+            meSpeak.speak('Please wait...' + info, this.speakOptions);
+            this.type(['Please wait...', info])
         },
         meaning(word) {
             var _this = this;
@@ -275,8 +285,39 @@ new Vue({
                 });
             }
         },
+        howToday() {
+          var _this = this;
+          return new Promise((resolve, reject) => {
+            var time = new Date().toLocaleTimeString();
+            var done = 0;
+
+            var time = _this.time();
+            time.then(function() {
+              setTimeout(function(){
+                // _this.weatherOutside();
+                done=1;
+              }, 3000);
+            });
+
+            doneCheck = setInterval(function(){
+              if (done) {
+                resolve("Stuff worked!");
+                _this.anythingElse();
+                clearInterval(doneCheck);
+              }
+              else {
+                reject(Error("It broke"));
+              }
+            }, 1000)
+          });
+        },
         closeCamera() {
 
+        },
+        anythingElse(){
+          this.stop();
+          meSpeak.speak(`Anything else?`, this.speakOptions);
+          this.resume(0);
         },
         learn(data) {
             var lowerCased = data.toLowerCase()
